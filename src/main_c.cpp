@@ -24,6 +24,7 @@ void test1()
     tls.meth = TLSv1_client_method();
 
     std::shared_ptr<client> c = std::make_shared<client>("127.0.0.1", 9999, tls);
+    // std::shared_ptr<client> c = std::make_shared<client>("127.0.0.1", 9999);
     if (c->initial() == false)
     {
         std::cout << "client initial error!" << '\n';

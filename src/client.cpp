@@ -1,9 +1,12 @@
 #include "client.h"
+
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <signal.h>
+
 #include <iostream>
 #include <chrono>
 
@@ -44,6 +47,8 @@ client::~client()
 
 bool client::initial()
 {
+    signal(SIGPIPE, SIG_IGN);
+
     if (type_ == CLIENT)
     {
         fd_ = create_fd();
@@ -92,12 +97,15 @@ bool client::init_ssl()
 
 void client::destroy()
 {
-    // 关闭SSL连接
-    SSL_shutdown(ssl_);
-    // 释放SSL
-    SSL_free(ssl_);
-    // 释放CTX
-    SSL_CTX_free(ctx_);
+    if (enable_ssl_)
+    {
+        // 关闭SSL连接
+        SSL_shutdown(ssl_);
+        // 释放SSL
+        SSL_free(ssl_);
+        // 释放CTX
+        SSL_CTX_free(ctx_);
+    }
     // 关闭socket连接
     close(fd_);
 }

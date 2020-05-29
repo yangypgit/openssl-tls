@@ -35,6 +35,7 @@ void test1()
         std::cout << "client ip: " << ip_addr << ", port: " << port << ", fd: " << cli.fd << '\n';
 
         std::shared_ptr<client> c = std::make_shared<client>(ip_addr, port, cli.fd, tls);
+        // std::shared_ptr<client> c = std::make_shared<client>(ip_addr, port, cli.fd);
         c->start();
     }
     
